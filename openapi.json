@@ -1,0 +1,66 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API de Auditoría Científica - Protocolo SAARE",
+    "description": "Especificación OpenAPI 3.1 para el protocolo de auditoría e instrucción en Capa 7. Garantiza ejecución Stateless (0 bytes en RAM post-ejecución) y cumplimiento ex-ante según ISO 42001 y EU AI Act.",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root Health Check",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/audit": {
+      "post": {
+        "summary": "Audit Instruction",
+        "description": "Somete una instrucción o payload al motor de inspección determinista en Capa 7 para validación ex-ante y trazabilidad de auditoría.",
+        "operationId": "audit_instruction_api_v2_audit_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "instruction_hash": {
+                    "type": "string",
+                    "example": "4ed128d5464fbaeb91d1e670d8a5bc9f635c24e937d57a9fdd81cb07c913ee8"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Instrucción auditada y verificada ex-ante",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "compliant" },
+                    "ram_retention_bytes": { "type": "integer", "example": 0 },
+                    "iso42001_check": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
